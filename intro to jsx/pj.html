@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>Cricket score</title>
+    <script crossorigin src="https://unpkg.com/react@18.0.0/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.0.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="root" style="text-align: center;"></div>
+    <script type="text/babel">
+        let score=0;
+        let wicket=0;
+        let bollwiseres=[];
+        let hit = 0;
+        let inputref=React.createRef();
+
+        const addscore=(num)=>{
+            hit = num;
+            rootElement.render(<App />);
+            console.log(hit);
+         }  
+        
+
+        const addwicket=()=>{
+            hit="W"
+            
+            rootElement.render(<App />);
+          }  
+        
+        
+
+        const ScoreButton=()=>(  
+            <div>
+                <button onClick={() =>addscore(0)}>0</button>
+                <button onClick={() =>addscore(1)}>1</button>
+                <button onClick={() =>addscore(2)}>2</button>
+                <button onClick={() =>addscore(3)}>3</button>
+                <button onClick={() =>addscore(4)}>4</button>
+                <button onClick={() =>addscore(5)}>5</button>
+                <button onClick={() =>addscore(6)}>6</button>
+                <button onClick={addwicket}>wicket</button>
+                </div>
+            )
+            const Result =()=>(
+                <div>
+                    {bollwiseres.map((res,index)=>(
+                     <>   
+                       {index%6===0? <br/>:null} 
+                    <span key ={index}>{res === 0 ? <strong>.</strong>:res} </span> &nbsp;&nbsp;</>))}
+                    </div>
+            )
+
+
+            const handelSubmit=(event)=>{
+                event.preventDefault();
+                if(hit=="W"){
+                    wicket+=1;
+                }else{
+                score +=hit;
+                }
+                bollwiseres.unshift(
+                    <span style={{ color: hit === "W" ? "red" : "black" }}>{hit}{","}{inputref.current.value}</span>);
+                    hit = 0;
+                    inputref.current.value="" ;
+
+
+                console.log(bollwiseres)
+                rootElement.render(<App />);
+                
+            }
+       
+
+            const Form=()=>(
+                <>
+                <form onSubmit={handelSubmit}>
+                   <input style={{ color: hit === "W" ? "red" : "black" }} value={hit}/>&nbsp;
+                   <input ref={inputref} placeholder="add a comment"/> 
+                   <button>Submit</button>
+                </form>
+                
+
+                </>
+            )
+        
+            
+        
+
+        const App = ()=>{
+            return(
+                <>
+                <h1> Score card</h1> 
+                <h2>SCORE:{score}/{wicket}</h2> 
+                <ScoreButton />
+                <br/>
+                <Form/>         
+                <hr/>
+                <div>
+                {bollwiseres.map((res,index)=>(
+                   <p key= {index}> {res}</p>
+                ))}
+                </div>
+                </>
+            )
+        }
+         const rootElement = ReactDOM.createRoot(document.getElementById("root"));rootElement.render(<App />);
+         </script>
+
+    
+</body>
+</html>
